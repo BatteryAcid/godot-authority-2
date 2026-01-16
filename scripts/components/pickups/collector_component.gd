@@ -1,0 +1,2 @@
+class_name CollectorComponent
+extends Area2D

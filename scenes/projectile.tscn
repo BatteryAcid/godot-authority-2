@@ -1,8 +1,9 @@
-[gd_scene load_steps=6 format=3 uid="uid://cc3hgxo55hou7"]
+[gd_scene load_steps=7 format=3 uid="uid://cc3hgxo55hou7"]
 
 [ext_resource type="Script" uid="uid://ddkhweotm8c4d" path="res://scripts/projectile.gd" id="1_c8fcr"]
 [ext_resource type="SpriteFrames" uid="uid://cuo2tavbvbfcv" path="res://assets/projectile_sprite_frames.tres" id="2_q3m7n"]
 [ext_resource type="Script" uid="uid://s5sn2tc115ng" path="res://scripts/components/hitbox_component.gd" id="3_softn"]
+[ext_resource type="Script" uid="uid://c78tb54fwjdtx" path="res://scripts/components/player_tagged.gd" id="4_6q2a6"]
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_q3m7n"]
 properties/0/path = NodePath(".:position")
@@ -11,32 +12,40 @@ properties/0/replication_mode = 1
 properties/1/path = NodePath(".:flip_dir")
 properties/1/spawn = true
 properties/1/replication_mode = 0
-properties/2/path = NodePath(".:fired_by_name")
+properties/2/path = NodePath("PlayerTagged:tagged_player_name")
 properties/2/spawn = true
-properties/2/replication_mode = 0
+properties/2/replication_mode = 2
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_q3m7n"]
 radius = 26.69
 height = 180.59
 
-[node name="Projectile" type="Node2D" node_paths=PackedStringArray("projectile_sprite")]
+[node name="Projectile" type="Node2D" node_paths=PackedStringArray("projectile_sprite", "player_tagged")]
 script = ExtResource("1_c8fcr")
 projectile_sprite = NodePath("AnimatedSprite2D")
+player_tagged = NodePath("PlayerTagged")
 
 [node name="ProjectileSynchronizer" type="MultiplayerSynchronizer" parent="."]
 replication_config = SubResource("SceneReplicationConfig_q3m7n")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(7, 0)
+scale = Vector2(0.5, 0.5)
 sprite_frames = ExtResource("2_q3m7n")
-animation = &"explode"
 autoplay = "default"
 
 [node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]
 
-[node name="HitboxComponent" type="Area2D" parent="."]
+[node name="HitboxComponent" type="Area2D" parent="." node_paths=PackedStringArray("player_tagged")]
 script = ExtResource("3_softn")
+player_tagged = NodePath("../PlayerTagged")
 metadata/_custom_type_script = "uid://s5sn2tc115ng"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HitboxComponent"]
 rotation = 1.5708
+scale = Vector2(0.5, 0.5)
 shape = SubResource("CapsuleShape2D_q3m7n")
+
+[node name="PlayerTagged" type="Node" parent="."]
+script = ExtResource("4_6q2a6")
+metadata/_custom_type_script = "uid://c78tb54fwjdtx"

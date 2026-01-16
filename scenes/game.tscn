@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://c7hx085d3my3g"]
+[gd_scene load_steps=11 format=3 uid="uid://c7hx085d3my3g"]
 
 [ext_resource type="Script" uid="uid://decxidnrg6wt2" path="res://scripts/game.gd" id="1_u5sy4"]
 [ext_resource type="Texture2D" uid="uid://bc17l4opfv77q" path="res://assets/game-bg/moon_sky.png" id="1_uwrxv"]
@@ -9,6 +9,7 @@
 [ext_resource type="Texture2D" uid="uid://dxci2ckfqp2yr" path="res://assets/game-bg/moon_front.png" id="5_iywne"]
 [ext_resource type="Texture2D" uid="uid://daqskdqetu3jm" path="res://assets/game-bg/moon_floor.png" id="6_p57ef"]
 [ext_resource type="Script" uid="uid://qpijsveyphtf" path="res://scripts/components/scoreboard_component.gd" id="9_0tnpc"]
+[ext_resource type="Script" uid="uid://7yfl0tpsj6gr" path="res://scripts/components/pickups/pickup_spawn_manager.gd" id="10_vtaks"]
 
 [node name="Game" type="Node2D"]
 script = ExtResource("1_u5sy4")
@@ -139,5 +140,15 @@ player1_score = NodePath("../GameMenu/Panel/Player1Score")
 player2_score = NodePath("../GameMenu/Panel/Player2Score")
 play_again_button = NodePath("../GameMenu/Panel/PlayAgain")
 metadata/_custom_type_script = "uid://qpijsveyphtf"
+
+[node name="Pickups" type="Node2D" parent="."]
+unique_name_in_owner = true
+
+[node name="PickupSpawnManager" type="Node" parent="."]
+script = ExtResource("10_vtaks")
+
+[node name="PickupSpawner" type="MultiplayerSpawner" parent="PickupSpawnManager"]
+_spawnable_scenes = PackedStringArray("uid://cdt0a6va201af", "uid://ydkf6xk0dskx", "uid://d2ap61tnvx0b0")
+spawn_path = NodePath("../../Pickups")
 
 [connection signal="pressed" from="GameMenu/Panel/HBoxContainer/MainMenu" to="." method="_on_main_menu_pressed"]

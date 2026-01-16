@@ -9,11 +9,15 @@ extends Node
 		
 		health_changed.emit()
 		
-		if health == 0:
+		if health <= 0 && not no_health_emitted:
 			no_health.emit()
+			no_health_emitted = true
 
 signal health_changed
 signal no_health
 
+var no_health_emitted = false
+
 func reset_health():
 	health = starting_health
+	no_health_emitted = false

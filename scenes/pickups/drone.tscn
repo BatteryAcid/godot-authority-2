@@ -1,0 +1,60 @@
+[gd_scene load_steps=9 format=3 uid="uid://d2ap61tnvx0b0"]
+
+[ext_resource type="Script" uid="uid://bxoacjl0yq6mx" path="res://scripts/components/pickups/drone.gd" id="1_ptywg"]
+[ext_resource type="SpriteFrames" uid="uid://cs68ypxqfux2" path="res://assets/drone_sprite_frames.tres" id="2_p00fw"]
+[ext_resource type="Script" uid="uid://c78tb54fwjdtx" path="res://scripts/components/player_tagged.gd" id="3_oatdl"]
+[ext_resource type="Script" uid="uid://bgdya1rkk43lb" path="res://scripts/components/pickups/drone_controller.gd" id="4_ptywg"]
+[ext_resource type="Script" uid="uid://s5sn2tc115ng" path="res://scripts/components/hitbox_component.gd" id="5_tt4ml"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_p00fw"]
+radius = 60.0
+height = 200.0
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_tt4ml"]
+radius = 40.0
+height = 150.0
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_ptywg"]
+properties/0/path = NodePath("..:position")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+
+[node name="Drone" type="Area2D" node_paths=PackedStringArray("input_controller", "player_tagged", "pickup_sprite")]
+script = ExtResource("1_ptywg")
+input_controller = NodePath("DroneInputController")
+player_tagged = NodePath("PlayerTagged")
+pickup_sprite = NodePath("AnimatedSprite2D")
+ttl = 4
+metadata/_custom_type_script = "uid://cayyb0js6gsam"
+
+[node name="CollectCollisionShape" type="CollisionShape2D" parent="."]
+rotation = 1.5707964
+shape = SubResource("CapsuleShape2D_p00fw")
+
+[node name="HitboxComponent" type="Area2D" parent="." node_paths=PackedStringArray("player_tagged")]
+script = ExtResource("5_tt4ml")
+damage = 2
+player_tagged = NodePath("../PlayerTagged")
+activation_delay_seconds = 1
+metadata/_custom_type_script = "uid://s5sn2tc115ng"
+
+[node name="HitboxCollision" type="CollisionShape2D" parent="HitboxComponent"]
+rotation = 1.5707964
+shape = SubResource("CapsuleShape2D_tt4ml")
+debug_color = Color(0.81238395, 0.4076654, 0.12474885, 0.41960785)
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+scale = Vector2(0.5, 0.5)
+sprite_frames = ExtResource("2_p00fw")
+autoplay = "default"
+
+[node name="PlayerTagged" type="Node" parent="."]
+script = ExtResource("3_oatdl")
+metadata/_custom_type_script = "uid://c78tb54fwjdtx"
+
+[node name="DroneSynchronizer" type="MultiplayerSynchronizer" parent="."]
+root_path = NodePath("../DroneInputController")
+replication_config = SubResource("SceneReplicationConfig_ptywg")
+
+[node name="DroneInputController" type="Node" parent="."]
+script = ExtResource("4_ptywg")

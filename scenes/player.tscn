@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://c8lhimkedr6pn"]
+[gd_scene load_steps=16 format=3 uid="uid://c8lhimkedr6pn"]
 
 [ext_resource type="Script" uid="uid://cnirl4fbcu71k" path="res://scripts/player.gd" id="1_3vyb7"]
 [ext_resource type="SpriteFrames" uid="uid://djepmkigcjqks" path="res://assets/ship_sprite_frames.tres" id="2_g2els"]
@@ -8,6 +8,7 @@
 [ext_resource type="Script" uid="uid://dash6tjwn1c6" path="res://scripts/components/hurt_component.gd" id="6_fjrip"]
 [ext_resource type="Script" uid="uid://pomul4e5d0i1" path="res://scripts/components/attribute_component.gd" id="6_smehm"]
 [ext_resource type="Script" uid="uid://bd52tlm3o3hqg" path="res://scripts/components/hurtbox_component.gd" id="7_smehm"]
+[ext_resource type="Script" uid="uid://csk6jci624k2" path="res://scripts/components/pickups/collector_component.gd" id="9_ur7pv"]
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_g2els"]
 properties/0/path = NodePath(".:position")
@@ -40,6 +41,9 @@ gradient = SubResource("Gradient_smehm")
 width = 100
 height = 8
 fill_from = Vector2(0.00206825, 0.0775595)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_ur7pv"]
+radius = 170.0
 
 [node name="Player" type="Node2D" node_paths=PackedStringArray("player_input", "input_synchronizer", "player_sprite", "attribute_component", "health_bar")]
 script = ExtResource("1_3vyb7")
@@ -126,3 +130,11 @@ grow_vertical = 2
 max_value = 5.0
 value = 5.0
 texture_progress = SubResource("GradientTexture2D_ur7pv")
+
+[node name="CollectorComponent" type="Area2D" parent="."]
+script = ExtResource("9_ur7pv")
+metadata/_custom_type_script = "uid://csk6jci624k2"
+
+[node name="CollectorShape" type="CollisionShape2D" parent="CollectorComponent"]
+shape = SubResource("CircleShape2D_ur7pv")
+debug_color = Color(0.74905264, 0.45178384, 0.25346184, 0.41960785)
