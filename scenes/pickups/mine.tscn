@@ -1,0 +1,40 @@
+[gd_scene load_steps=7 format=3 uid="uid://cdt0a6va201af"]
+
+[ext_resource type="Script" uid="uid://cvnkflemde1p2" path="res://scripts/components/pickups/mine.gd" id="1_6qs8q"]
+[ext_resource type="SpriteFrames" uid="uid://cgxnr5pt3hf3x" path="res://assets/mine_sprite_frames.tres" id="3_gp42q"]
+[ext_resource type="Script" uid="uid://s5sn2tc115ng" path="res://scripts/components/hitbox_component.gd" id="5_6citd"]
+[ext_resource type="Script" uid="uid://c78tb54fwjdtx" path="res://scripts/components/player_tagged.gd" id="6_jw06m"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_mr1b6"]
+radius = 77.41
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_aoyl5"]
+radius = 70.0
+
+[node name="Mine" type="Area2D" node_paths=PackedStringArray("player_tagged", "pickup_sprite")]
+script = ExtResource("1_6qs8q")
+player_tagged = NodePath("PlayerTagged")
+pickup_sprite = NodePath("AnimatedSprite2D")
+metadata/_custom_type_script = "uid://fogj64q77vte"
+
+[node name="CollectCollisionShape" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_mr1b6")
+
+[node name="HitboxComponent" type="Area2D" parent="." node_paths=PackedStringArray("player_tagged")]
+script = ExtResource("5_6citd")
+damage = 4
+player_tagged = NodePath("../PlayerTagged")
+activation_delay_seconds = 1
+metadata/_custom_type_script = "uid://s5sn2tc115ng"
+
+[node name="HitboxCollision" type="CollisionShape2D" parent="HitboxComponent"]
+shape = SubResource("CircleShape2D_aoyl5")
+debug_color = Color(0.84395075, 0.37422034, 0.17932352, 0.41960785)
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = ExtResource("3_gp42q")
+autoplay = "default"
+
+[node name="PlayerTagged" type="Node" parent="."]
+script = ExtResource("6_jw06m")
+metadata/_custom_type_script = "uid://c78tb54fwjdtx"

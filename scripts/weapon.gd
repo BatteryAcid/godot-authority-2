@@ -15,9 +15,9 @@ func _weapon_fired():
 @rpc("any_peer", "call_local")
 func _spawn_projectile():
 	if is_multiplayer_authority():
-		var projectile_scene = projectile.instantiate() as Node2D
+		var projectile_scene = projectile.instantiate() as Projectile
 		projectile_scene.global_transform = _parent_player.global_transform.translated(Vector2(0, 18))
-		projectile_scene.fired_by_name = _parent_player.name
+		projectile_scene.player_tagged.tagged_player_name = _parent_player.name
 	
 		if not _parent_player.name == "1":
 			projectile_scene.flip_dir = -1

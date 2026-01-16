@@ -1,0 +1,64 @@
+[gd_scene load_steps=10 format=3 uid="uid://ydkf6xk0dskx"]
+
+[ext_resource type="Script" uid="uid://s7o45gatbvgi" path="res://scripts/components/pickups/side_kick.gd" id="1_6k33k"]
+[ext_resource type="Script" uid="uid://c78tb54fwjdtx" path="res://scripts/components/player_tagged.gd" id="3_6k33k"]
+[ext_resource type="SpriteFrames" uid="uid://crgp8cl4r8mh5" path="res://assets/side_kick_sprite_frames.tres" id="3_isrqf"]
+[ext_resource type="Script" uid="uid://s5sn2tc115ng" path="res://scripts/components/hitbox_component.gd" id="4_isrqf"]
+[ext_resource type="Script" uid="uid://b60drp2ko2in1" path="res://scripts/components/pickups/side_kick_controller.gd" id="5_w0iou"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_6k33k"]
+radius = 60.0
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_w0iou"]
+radius = 30.0
+height = 115.0
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_6k33k"]
+properties/0/path = NodePath(".:position")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_w0iou"]
+properties/0/path = NodePath(".:input_dir")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+
+[node name="SideKick" type="Area2D" node_paths=PackedStringArray("input_controller", "player_tagged", "pickup_sprite")]
+script = ExtResource("1_6k33k")
+input_controller = NodePath("SideKickInputController")
+player_tagged = NodePath("PlayerTagged")
+pickup_sprite = NodePath("AnimatedSprite2D")
+ttl = 5
+metadata/_custom_type_script = "uid://fogj64q77vte"
+
+[node name="CollectCollisionShape" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_6k33k")
+
+[node name="HitboxComponent" type="Area2D" parent="." node_paths=PackedStringArray("player_tagged")]
+script = ExtResource("4_isrqf")
+damage = 4
+player_tagged = NodePath("../PlayerTagged")
+activation_delay_seconds = 1
+metadata/_custom_type_script = "uid://s5sn2tc115ng"
+
+[node name="HitboxCollision" type="CollisionShape2D" parent="HitboxComponent"]
+shape = SubResource("CapsuleShape2D_w0iou")
+debug_color = Color(0.78673893, 0.4275647, 0.17452484, 0.41960785)
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+scale = Vector2(0.5, 0.5)
+sprite_frames = ExtResource("3_isrqf")
+autoplay = "default"
+
+[node name="PlayerTagged" type="Node" parent="."]
+script = ExtResource("3_6k33k")
+metadata/_custom_type_script = "uid://c78tb54fwjdtx"
+
+[node name="SideKickSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_6k33k")
+
+[node name="SideKickInputController" type="Node" parent="."]
+script = ExtResource("5_w0iou")
+
+[node name="SideKickInputSynchronizer" type="MultiplayerSynchronizer" parent="SideKickInputController"]
+replication_config = SubResource("SceneReplicationConfig_w0iou")
